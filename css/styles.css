@@ -1,0 +1,116 @@
+:root {
+    --bgPrimary: #F3FBF9;
+    --bgSecondary: #E7EFED;
+    --fontCol: #081816;
+}
+
+body {
+    height: 100vh;
+    margin: 0px;
+    padding: 0px;
+    overflow: hidden;
+}
+
+/* NOTE: Page structure */
+
+.wrapper {
+    display: grid;
+    grid-template: 10% 1fr 5% / 100vw;
+    grid-template-areas: 
+        "header"
+        "content"
+        "footer";
+    height: 100%;
+    width: 100%;
+}
+
+header {grid-area: header;}
+main {grid-area: content;}
+footer {grid-area: footer;}
+
+/* NOTE: Header */
+
+header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 30px;
+    gap: 20px;
+    background-color: var(--bgPrimary);
+}
+
+.title {
+    color: var(--fontCol);
+    text-wrap: nowrap;
+    letter-spacing: 1px;
+    font-size: 2rem;
+    font-weight: 600;
+}
+
+
+/* NOTE: Main */
+
+#main-content {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    justify-content: flex-start;
+    align-items: center;
+    color: var(--fontCol);
+    background-color: var(--bgPrimary);
+}
+
+#gameboard {
+    display: grid;
+    grid-template: 1fr 1fr 1fr / 1fr 1fr 1fr;
+    color: var(--fontCol);
+    background-color: var(--bgSecondary);
+    width: max(500px, 60vh);
+    min-width: 200px;
+    aspect-ratio: 1 / 1;
+    margin: 0 10% 0 10%;
+    border: 1.5px solid black;
+    box-shadow: inset 0 0 2px 2px #2A3036;
+    -moz-box-shadow: inset 0 0 2px 2px #2A3036;
+    -webkit-box-shadow: inset 0 0 2px 2px #2A3036;
+}
+
+.square {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    font-size: 3rem;
+    border: 1px solid black;
+}
+
+#settings {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+/* NOTE: Footer */
+
+footer {
+    text-align: center; 
+    background-color: var(--bgPrimary);
+}
+
+.yagrr {
+    font-weight: bold; 
+    text-decoration: none;
+    color: var(--fontCol);
+    transition: all .2s ease-in-out
+}
+
+.yagrr:hover {
+    text-shadow: 0 0 15px #1DE7E0;
+    -webkit-animation: 1s ease-in-out;
+    -moz-animation:  1s ease-in-out ;
+    animation:  1s ease-in-out;
+}
+
