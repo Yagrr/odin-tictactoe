@@ -20,16 +20,21 @@
             <!---- Gameboard ---->
 
             <main id="main-content">
-            <div id="result-display"></div>
-                <div id="gameboard">
 
+                <div id="result-display" class="hidden">
+                    <dialog id="result"></dialog>
                 </div>
+                <div id="gameboard"></div>
 
-                <div id="settings">
-                    <input type="text" id="player1" placeholder="Player 1">
-                    <input type="text" id="player2" placeholder="Player 2">
-                    <button id="start-button">Start Game</button>
-                </div>
+                <form id="settings">
+                    <input type="text" id="player1" required placeholder="Player 1"
+                        oninvalid="this.setCustomValidity('Enter name here')"
+                        oninput="this.setCustomValidity('')"/>
+                    <input type="text" id="player2" required placeholder="Player 2" 
+                        oninvalid="this.setCustomValidity('Enter name here')"
+                        oninput="this.setCustomValidity('')"/>
+                    <button id="start-button">Start Game</input>
+                </form>
             </main>
             <!---------Footer--------->
             <footer>
