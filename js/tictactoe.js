@@ -11,33 +11,47 @@ const tictactoe = ( () => {
 
         let cellsHTML = "";
         gameBoard.forEach( ( cell, index ) => {
-            cellsHTML = `<div class='square' id='square-${index}' index=${index}><\div>`;
+            cellsHTML = `<div class='square empty' id='square-${index}' index=${index}><\div>`;
             gameBoardHTML.insertAdjacentHTML( 'beforeend', cellsHTML );
         });
     })
 
     gameBoardHTML.addEventListener( "click", (e) => {
+
         if ( e.target.classList.contains("square") ) {
             const targetCell = e.target;
+            const cellIndex = targetCell.getAttribute( "index" );
+
             // If empty cell then proceed
-            if (targetCell.textContent === "") {
-                const cellIndex = targetCell.getAttribute( "index" );
-                console.log(cellIndex);
+            if (tictactoe.getgameBoard()[ cellIndex ] === "") {
+
                 gameCtrl.addMark( cellIndex );
                 targetCell.textContent = gameBoard[ cellIndex ];
+                targetCell.classList.remove("empty");
+
             }
         }
+
+        gameCtrl.checkWin();
+
     });
 
     // TODO: Create game win/lose state
 
-    const update = ( index, value) => {
-        gameBoard[ index ] = value;
+    const update = ( index, mark ) => {
+        gameBoard[ index ] = mark;
     }
+
+    const resetgameBoard = () => gameBoard = ["","","","","","","","",""];
+
+
+    const getgameBoard = () => gameBoard;
 
     return {
         render,
         update,
+        getgameBoard,
+        resetgameBoard,
     }
 
 })();
@@ -54,46 +68,89 @@ const createPlayer = ( name, mark ) => {
 const gameCtrl = (() => {
     let players = [];
     let currentPlayerIndex;
-    let turns;
+    let turns = 0;
     let gameOver;
 
     const start = () => {
         players = [ 
             createPlayer( document.querySelector('#player1').value, "X" ),
             createPlayer( document.querySelector('#player2').value, "O" )
-        ]
+        ] 
 
+        turns = 0;
         currentPlayerIndex = 0;
         gameOver = false;
+        tictactoe.resetgameBoard();
         tictactoe.render();
     }
 // TODO: Create reset button on the gameCtrl and Render-side
-    const end = () => {
-        gameOver = true;
-    }
 
     const addMark = ( cellIndex ) => {
-        tictactoe.update( cellIndex, players[currentPlayerIndex].mark )
-        // Switch
-        currentPlayerIndex ? currentPlayerIndex = 0 : currentPlayerIndex = 1;
-        if ( turns === 8 ) {
-            gameCtrl.end();
+
+        tictactoe.update( cellIndex, players[ currentPlayerIndex ].mark )
+        if (checkWin( tictactoe.getgameBoard, players[ currentPlayerIndex ].mark ) ) {
+            console.log("Win!")
+            resultDisplayHTML.classList.remove('hidden');
+            resultHTML.textContent = players[ currentPlayerIndex ].name + ' wins!';
+            gameOver = true;
+        }
+
+        if ( turns === 8  && gameOver === false ) {
+            console.log("Draw!")
+            resultDisplayHTML.classList.remove('hidden');
+            resultHTML.textContent = 'Draw!';
         } else {
+            console.log("Turn: " + turns);
             turns += 1;
         }
+
+        // Switch
+        currentPlayerIndex = currentPlayerIndex ?  0 : 1;
+
+    }
+
+    const checkWin = () => {
+        gameboard = tictactoe.getgameBoard();
+        const winningCombinations = [
+            [ 0, 1, 2 ],
+            [ 3, 4, 5 ],
+            [ 6, 7, 8 ],
+            [ 0, 3, 6 ],
+            [ 1, 4, 7 ],
+            [ 2, 5, 8 ],
+            [ 0, 4, 8 ],
+            [ 2, 4, 6 ],
+        ] 
+
+        for ( let i = 0; i < winningCombinations.length; i++) {
+            const [ a, b, c] = winningCombinations[i]
+            if (gameboard[a] && gameboard[a] === gameboard[b] && gameboard[a] === gameboard[c] ) {
+                return true;
+            } 
+        }
+        return false;
     }
 
     return {
         start,
-        end,
         addMark,
+        checkWin,
     }
 })();
-// TODO: Make start button turn into restart button
+
+const player1HTML = document.querySelector('#player1');
+const player2HTML = document.querySelector('#player2');
+const resultDisplayHTML = document.querySelector('#result-display');
+const resultHTML = document.querySelector('#result');
 const startBtn = document.querySelector( '#start-button' );
-startBtn.addEventListener( 'click', () => {
-    gameCtrl.start();
-    startBtn.textContent = "Restart Game";
+
+startBtn.addEventListener( 'click', (e) => {
+    if (player1HTML.value != '' && player2HTML.value != '') {
+        e.preventDefault();
+        resultDisplayHTML.classList.add('hidden');
+        gameCtrl.start();
+        startBtn.textContent = "Restart Game"
+    } 
 });
 
 // Use player factory
