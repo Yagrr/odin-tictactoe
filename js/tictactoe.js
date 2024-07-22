@@ -93,6 +93,7 @@ const gameCtrl = (() => {
 const startBtn = document.querySelector( '#start-button' );
 startBtn.addEventListener( 'click', () => {
     gameCtrl.start();
+    startBtn.textContent = "Restart Game";
 });
 
 // Use player factory
